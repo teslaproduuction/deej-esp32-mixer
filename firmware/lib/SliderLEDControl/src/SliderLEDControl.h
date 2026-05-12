@@ -1,0 +1,62 @@
+#ifndef VOLUMEMIXER_SLIDERLEDCONTROL_H
+#define VOLUMEMIXER_SLIDERLEDCONTROL_H
+
+#include <Adafruit_NeoPixel.h>
+
+#define NUM_LEDS_PER_SLIDER 12 // Number of LEDs each slider controls
+// Sliding-window size for ADC smoothing. ESP32 ADC1 is noticeably noisy
+// (±15-30 raw units stationary); a window of 8 cuts that roughly in
+// half without adding perceptible latency (~24 ms at the 10 ms loop).
+#define NUM_READINGS 8
+
+class SliderLEDControl {
+private:
+    bool debug;
+    int sensorPin; // Analog pin to read the slider
+    int readings[NUM_READINGS]; // Circular buffer for storing sensor readings
+    int readIndex = 0; // Current position in the buffer
+    int total = 0; // Sum of the readings for averaging
+    int averageValue = 0;
+    int brightness = 35;
+    int section1R = 0;
+    int section1G = 149;
+    int section1B = 255;
+    int section2R = 153;
+    int section2G = 0;
+    int section2B = 255;
+    int section3R = 255;
+    int section3G = 0;
+    int section3B = 0;
+    int animationFrame = 0;
+    int direction = false;
+    Adafruit_NeoPixel strip;
+    bool wasLastZero = false;
+    unsigned long zeroVolumeTimes[2] = {0, 0};
+
+public:
+    SliderLEDControl(int sensorPin, int dataPin, bool debug = false);
+
+    void updateZeroVolumeTimes();
+    bool checkForDoubleZero();
+    void setBrightness(int brightness);
+
+    void setColors(
+            int r1, int g1, int b1,
+            int r2, int g2, int b2,
+            int r3, int g3, int b3
+    );
+
+    int getAverageValue();
+
+    void animate();
+
+    void update();        // sample + render (kept for backwards compat)
+    void sample();        // refresh averageValue without touching LEDs
+    void render();        // paint LEDs using current averageValue + theme
+    void renderRainbow(uint16_t baseHue); // smooth HSV rotation, ignores theme
+
+    void showLights(int value);
+};
+
+
+#endif //VOLUMEMIXER_SLIDERLEDCONTROL_H

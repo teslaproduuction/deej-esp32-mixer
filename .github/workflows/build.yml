@@ -1,0 +1,102 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # ---------- ESP32 firmware ----------
+  firmware:
+    name: Firmware (ESP32)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Build firmware
+        working-directory: firmware
+        run: pio run
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mixer-firmware-esp32
+          path: |
+            firmware/.pio/build/esp32dev/firmware.bin
+            firmware/.pio/build/esp32dev/firmware.elf
+            firmware/.pio/build/esp32dev/bootloader.bin
+            firmware/.pio/build/esp32dev/partitions.bin
+
+  # ---------- Desktop application + NSIS installer ----------
+  desktop:
+    name: Desktop (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Wails CLI
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install NSIS
+        run: choco install nsis -y --no-progress
+
+      - name: Build installer
+        working-directory: desktop
+        run: wails build -nsis -clean
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: mixer-installer-windows-amd64
+          path: desktop/build/bin/*-installer.exe
+
+      - name: Upload standalone exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: mixer-windows-amd64
+          path: desktop/build/bin/mixer.exe
+
+  # ---------- Release on tag push ----------
+  release:
+    name: GitHub Release
+    needs: [firmware, desktop]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/mixer-installer-windows-amd64/*
+            artifacts/mixer-windows-amd64/*
+            artifacts/mixer-firmware-esp32/*
+          generate_release_notes: true

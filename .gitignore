@@ -1,0 +1,47 @@
+# ===== IDE / OS =====
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== Logs =====
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== PlatformIO (firmware/) =====
+firmware/.pio/
+firmware/.pioenvs/
+firmware/.piolibdeps/
+firmware/.clang_complete
+firmware/.gcc-flags.json
+firmware/lib/readme.txt
+firmware/include/README
+
+# Stale pio artifacts that sometimes land in the repo root
+.pio/
+
+# ===== Go / Wails (desktop/) =====
+# Build artifacts — installers & binaries are produced by CI / build script
+desktop/build/bin/
+
+# Generated bindings — produced by `wails build`/`wails dev`
+desktop/frontend/wailsjs/
+
+# Node deps & Vite output
+desktop/frontend/node_modules/
+desktop/frontend/dist/
+
+# Go test/coverage
+*.test
+*.out
+coverage.txt
+
+# ===== Wails Windows NSIS work dir =====
+desktop/build/windows/installer/tmp/
+
+# ===== Memory / cache =====
+.claude/
