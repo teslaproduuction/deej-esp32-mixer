@@ -1,10 +1,22 @@
-# Mixer
+<div align="center">
 
-Аппаратно-программный комплекс для управления громкостью отдельных приложений
-Windows физическими ползунками. На каждом ползунке расположена адресная LED-лента,
-отображающая текущий уровень громкости.
+# 🎚 Mixer
 
-Дипломный проект (ВКР), 2026.
+**Аппаратно-программный комплекс для управления громкостью отдельных приложений  
+Windows физическими ползунками**
+
+[![MakerWorld](https://img.shields.io/badge/MakerWorld-3D_корпус-1A73E8?style=for-the-badge&logo=bambulab&logoColor=white)](https://makerworld.com/en/models/419682-volume-mixer-5-channel-deej#profileId-322350)
+[![Hardware](https://img.shields.io/badge/Hardware-deej--esp32-E7352C?style=for-the-badge&logo=espressif&logoColor=white)](https://github.com/teslaproduuction/deej-esp32)
+[![ESP32](https://img.shields.io/badge/Firmware-PlatformIO_Arduino-FF7F00?style=for-the-badge&logo=platformio&logoColor=white)](https://github.com/teslaproduuction/mixer--)
+[![Desktop](https://img.shields.io/badge/Desktop-Go_Wails_Svelte-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://github.com/teslaproduuction/mixer--)
+
+*Дипломный проект (ВКР), 2026*
+
+</div>
+
+---
+
+На каждом ползунке расположена адресная LED-лента, отображающая текущий уровень громкости.
 
 ## Состав
 
@@ -20,6 +32,7 @@ mixer_proj/
 - 5 × ползунковый потенциометр 10 кОм
 - 5 × WS2812B-лента (~10 LED каждая)
 - Питание: USB 5V от ПК
+- 3D-печатный корпус → [MakerWorld](https://makerworld.com/en/models/419682-volume-mixer-5-channel-deej#profileId-322350)
 
 Распиновка:
 
@@ -55,7 +68,7 @@ v1|v2|v3|v4|v5\n
 **Downlink** (ПК → ESP32), по одной команде на строку:
 
 | Команда | Описание |
-|---|---|
+|---------|----------|
 | `T:<n>` | Установить тему (0..6) |
 | `B:<n>` | Установить яркость (0..50) |
 | `O:<i>,<r>,<g>,<b>` | Override цвета ползунка `i` (0..4) сплошным RGB |
@@ -76,10 +89,8 @@ wails build  # production .exe → build/bin/mixer.exe
 
 ### Возможности
 
-- Привязка ползунков к Master / отдельным приложениям (по имени exe) /
-  системным звукам / микрофону / foreground-окну («game»)
-- 4 экрана: Главная (живые бары), Привязки (drag-free редактор), Настройки,
-  Темы LED (7 пресетов + регулировка яркости)
+- Привязка ползунков к Master / отдельным приложениям (по имени exe) / системным звукам / микрофону / foreground-окну («game»)
+- 4 экрана: Главная (живые бары), Привязки (drag-free редактор), Настройки, Темы LED (7 пресетов + регулировка яркости)
 - Auto-unmute при поднятии ползунка выше нуля
 - Калибровка АЦП (запоминает фактические min/max каждого ползунка)
 - Сворачивание в системный трей с меню
@@ -89,7 +100,7 @@ wails build  # production .exe → build/bin/mixer.exe
 ## Стек
 
 | Часть | Технологии |
-|---|---|
+|-------|------------|
 | Прошивка | PlatformIO, Arduino framework, Adafruit NeoPixel, EEPROM |
 | Бэкенд десктопа | Go 1.21+, Wails v2, go.bug.st/serial, go-wca + go-ole (Windows Core Audio), gopkg.in/yaml.v3, energye/systray |
 | Фронтенд десктопа | Svelte 4, TypeScript, Vite (всё через Wails) |
