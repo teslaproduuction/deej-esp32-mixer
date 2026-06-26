@@ -2,21 +2,27 @@
 
 # 🎚 Mixer
 
-**Аппаратно-программный комплекс для управления громкостью отдельных приложений  
-Windows физическими ползунками**
+**Управление громкостью отдельных приложений Windows физическими ползунками**
 
 [![MakerWorld](https://img.shields.io/badge/MakerWorld-3D_корпус-1A73E8?style=for-the-badge&logo=bambulab&logoColor=white)](https://makerworld.com/en/models/419682-volume-mixer-5-channel-deej#profileId-322350)
 [![Hardware](https://img.shields.io/badge/Hardware-deej--esp32-E7352C?style=for-the-badge&logo=espressif&logoColor=white)](https://github.com/teslaproduuction/deej-esp32)
-[![ESP32](https://img.shields.io/badge/Firmware-PlatformIO_Arduino-FF7F00?style=for-the-badge&logo=platformio&logoColor=white)](https://github.com/teslaproduuction/mixer--)
-[![Desktop](https://img.shields.io/badge/Desktop-Go_Wails_Svelte-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://github.com/teslaproduuction/mixer--)
-
-*Дипломный проект (ВКР), 2026*
+[![Firmware](https://img.shields.io/badge/Firmware-PlatformIO_Arduino-FF7F00?style=for-the-badge&logo=platformio&logoColor=white)](firmware/)
+[![Desktop](https://img.shields.io/badge/Desktop-Go_Wails_Svelte-00ADD8?style=for-the-badge&logo=go&logoColor=white)](desktop/)
 
 </div>
 
 ---
 
-На каждом ползунке расположена адресная LED-лента, отображающая текущий уровень громкости.
+5-канальный аппаратный микшер громкости на ESP32. Каждый ползунок управляет отдельным приложением, на каждом — адресная LED-лента, отображающая уровень громкости в реальном времени.
+
+## Интерфейс
+
+| | |
+|---|---|
+| ![Главная](docs/screenshots/home.png) | ![Привязки](docs/screenshots/bindings.png) |
+| **Главная** — живые VU-метры 5 каналов | **Привязки** — маршрутизация приложений по ползункам |
+| ![Настройки](docs/screenshots/settings.png) | ![Темы LED](docs/screenshots/themes.png) |
+| **Настройки** — соединение, обработка сигнала, калибровка | **Темы LED** — режим лент, палитра, яркость |
 
 ## Состав
 
@@ -107,4 +113,4 @@ wails build  # production .exe → build/bin/mixer.exe
 
 ## Лицензия
 
-Дипломный проект, использование некоммерческое.
+MIT
